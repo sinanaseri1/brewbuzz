@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/utils/supabase/server";
+import { signOut } from "@/app/login/actions";
+import { User } from "lucide-react";
 
-export function Navbar() {
+export async function Navbar() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
@@ -9,16 +17,41 @@ export function Navbar() {
           <span className="font-serif text-xl font-bold">BrewBuzz</span>
         </Link>
         <nav className="flex flex-1 items-center space-x-6 text-sm font-medium">
-          <Link href="/roasters" className="transition-colors hover:text-foreground/80">Roasters</Link>
-          <Link href="/coffees" className="transition-colors hover:text-foreground/80">Coffees</Link>
+          <Link
+            href="/roasters"
+            className="transition-colors hover:text-foreground/80"
+          >
+            Roasters
+          </Link>
+          <Link
+            href="/coffees"
+            className="transition-colors hover:text-foreground/80"
+          >
+            Coffees
+          </Link>
         </nav>
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" asChild>
-             <Link href="/login">Log in</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/signup">Sign Up</Link>
-          </Button>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-muted-foreground hidden sm:inline-block">
+                {user.email}
+              </span>
+              <form action={signOut}>
+                <Button variant="outline" size="sm">
+                  Sign Out
+                </Button>
+              </form>
+            </div>
+          ) : (
+            <>
+              <Button variant="ghost" asChild>
+                <Link href="/login">Log in</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/login">Sign Up</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>

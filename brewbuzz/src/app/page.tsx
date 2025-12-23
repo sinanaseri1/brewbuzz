@@ -1,40 +1,32 @@
 import { Navbar } from "@/components/navbar";
 import { CoffeeCard } from "@/components/coffee-card";
+import { createClient } from "@/utils/supabase/server";
 
-export default function Home() {
-  // Temporary dummy data
-  const featuredCoffees = [
-    {
-      id: "1",
-      name: "Holler Mountain",
-      roaster: "Stumptown",
-      imageUrl: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=800&auto=format&fit=crop",
-      rating: 4.5,
-      roastLevel: "Medium",
-      flavors: ["Caramel", "Fruit", "Creamy"],
-      reviewCount: 128,
-    },
-    {
-      id: "2",
-      name: "Hair Bender",
-      roaster: "Stumptown",
-      imageUrl: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=800&auto=format&fit=crop",
-      rating: 4.8,
-      roastLevel: "Dark",
-      flavors: ["Dark Chocolate", "Citrus", "Toffee"],
-      reviewCount: 342,
-    },
-    {
-      id: "3",
-      name: "Three Africas",
-      roaster: "Blue Bottle",
-      imageUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop",
-      rating: 4.2,
-      roastLevel: "Light",
-      flavors: ["Golden Raisin", "Winey", "Lemon"],
-      reviewCount: 89,
-    },
-  ];
+export default async function Home() {
+  const supabase = await createClient();
+
+  // 1. Fetch Coffees + Linked Roaster Name
+  const { data: coffees } = await supabase
+    .from("coffees")
+    .select(`
+      *,
+      roasters (
+        name
+      )
+    `);
+
+  // 2. Format the data for the UI
+  // Note: We don't have reviews yet, so we default rating/flavors to empty/0
+  const formattedCoffees = coffees?.map((coffee: any) => ({
+    id: coffee.id,
+    name: coffee.name,
+    roaster: coffee.roasters.name, // Extracted from the join
+    imageUrl: coffee.image_url,
+    rating: 0, // Placeholder until we add reviews
+    roastLevel: coffee.roast_level,
+    flavors: [], // Placeholder until we add reviews
+    reviewCount: 0,
+  })) || [];
 
   return (
     <main className="min-h-screen bg-background">
@@ -59,7 +51,7 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {featuredCoffees.map((coffee) => (
+          {formattedCoffees.map((coffee) => (
             <CoffeeCard key={coffee.id} {...coffee} />
           ))}
         </div>
