@@ -35,7 +35,7 @@ export default function LoginPage() {
               {/* distinct buttons calling different server actions */}
               <Button formAction={login}>Log in</Button>
               <Button formAction={signup} variant="outline">
-                Sign up
+                Sign Up (Test)
               </Button>
             </div>
           </form>
