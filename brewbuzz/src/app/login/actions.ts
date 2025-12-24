@@ -38,7 +38,9 @@ export async function signup(formData: FormData) {
   });
 
   if (error) {
-    redirect("/login?error=Could not create account");
+    console.error("Signup Error:", error); // This prints to Vercel logs
+    // detailed error in the URL so you see it immediately
+    redirect(`/login?error=${encodeURIComponent(error.message)}`);
   }
 
   revalidatePath("/", "layout");
