@@ -18,8 +18,8 @@ const config: Config = {
         },
         extend: {
             fontFamily: {
-                sans: ["var(--font-sans)", "sans-serif"],
-                serif: ["var(--font-serif)", "serif"], // This adds the premium feel
+                sans: ["var(--font-sans)"],
+                serif: ["var(--font-serif)"], // Add this line
             },
             colors: {
                 border: "hsl(var(--border))",

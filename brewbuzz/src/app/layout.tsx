@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google"; // Import a nice serif
+import { Inter, Playfair_Display } from "next/font/google"; // Import fonts
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"; // ✅ Correct way (Shadcn Component)
+import { Toaster } from "sonner";
 
+// Initialize fonts
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" });
 
 export const metadata: Metadata = {
-  title: "BrewBuzz",
-  description: "The coffee community.",
+  title: "BrewBuzz | Discover Your Perfect Coffee",
+  description: "Crowdsourced coffee reviews and discovery.",
 };
 
 export default function RootLayout({
@@ -20,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
         {children}
-        <Toaster position="top-center" richColors /> {/* Add this */}
+        <Toaster position="top-center" />
       </body>
     </html>
   );
