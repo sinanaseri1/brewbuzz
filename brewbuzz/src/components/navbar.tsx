@@ -1,62 +1,72 @@
 import Link from "next/link";
+import { Coffee, Plus, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
-import { signOut } from "@/app/login/actions";
-import { User } from "lucide-react";
+import { UserNav } from "./user-nav";
+import { signOutAction } from "@/app/auth/actions"; // <--- Import is SAFE here
 
 export async function Navbar() {
     const supabase = await createClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    let isAdmin = false;
+    if (user) {
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", user.id)
+            .single();
+        isAdmin = profile?.role === "admin";
+    }
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container flex h-14 items-center">
-                <Link href="/" className="mr-6 flex items-center space-x-2">
-                    <span className="font-serif text-xl font-bold">BrewBuzz</span>
+        <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+            <div className="container flex h-16 items-center justify-between">
+
+                <Link href="/" className="flex items-center gap-2 font-serif text-xl font-bold">
+                    <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+                        <Coffee className="h-5 w-5" />
+                    </div>
+                    BrewBuzz
                 </Link>
-                <nav className="flex flex-1 items-center space-x-6 text-sm font-medium">
-                    <Link
-                        href="/roasters"
-                        className="transition-colors hover:text-foreground/80"
-                    >
-                        Roasters
-                    </Link>
-                    <Link
-                        href="/coffees"
-                        className="transition-colors hover:text-foreground/80"
-                    >
-                        Coffees
-                    </Link>
-                </nav>
-                <div className="flex items-center space-x-4">
-                    {user ? (
-                        <div className="flex items-center gap-4">
-                            <Link
-                                href="/profile"
-                                className="text-sm font-medium hover:underline hover:text-primary transition-colors hidden sm:inline-block"
-                            >
-                                {user.email}
+
+                <div className="flex items-center gap-4">
+
+                    {isAdmin && (
+                        <Button variant="ghost" size="sm" asChild className="text-red-600 hover:text-red-700 hover:bg-red-50">
+                            <Link href="/admin">
+                                <Shield className="mr-2 h-4 w-4" />
+                                Admin
                             </Link>
-                            <form action={signOut}>
-                                <Button variant="outline" size="sm">
-                                    Sign Out
-                                </Button>
-                            </form>
-                        </div>
-                    ) : (
-                        <>
-                            <Button variant="ghost" asChild>
-                                <Link href="/login">Log in</Link>
-                            </Button>
-                            <Button asChild>
-                                <Link href="/login">Sign Up</Link>
-                            </Button>
-                        </>
+                        </Button>
                     )}
+
+                    {user ? (
+                        <>
+                            <Button size="sm" variant="outline" asChild>
+                                <Link href="/coffees/add">
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Add Coffee
+                                </Link>
+                            </Button>
+
+                            {/* Pass the action down as a prop */}
+                            <UserNav email={user.email!} />
+                        </>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm" asChild>
+                                <Link href="/login">Sign In</Link>
+                            </Button>
+                            <Button size="sm" asChild>
+                                <Link href="/login">Get Started</Link>
+                            </Button>
+                        </div>
+                    )}
+
                 </div>
             </div>
-        </header>
+        </nav>
     );
 }

@@ -1,18 +1,18 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Star } from "lucide-react";
+import Image from "next/image";
+import { Star, Coffee } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
 interface CoffeeCardProps {
   id: string;
   name: string;
   roaster: string;
-  imageUrl: string;
+  imageUrl: string | null;
   rating: number;
   roastLevel: string;
-  flavors: string[];
-  reviewCount: number;
+  flavors?: string[];
+  reviewCount?: number;
 }
 
 export function CoffeeCard({
@@ -22,55 +22,71 @@ export function CoffeeCard({
   imageUrl,
   rating,
   roastLevel,
-  flavors,
-  reviewCount,
+  flavors = [],
+  reviewCount = 0,
 }: CoffeeCardProps) {
   return (
-    <Card className="group h-full overflow-hidden transition-all hover:shadow-lg">
-      {/* 1. Link the Image */}
-      <Link href={`/coffees/${id}`} className="block relative aspect-square w-full overflow-hidden bg-muted">
-        <Image
-          src={imageUrl}
-          alt={name}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-        />
-        <div className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-sm font-semibold shadow-sm backdrop-blur">
-          <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-          <span>{rating.toFixed(1)}</span>
+    <Link href={`/coffees/${id}`} className="block group h-full">
+      <Card className="overflow-hidden transition-all hover:border-primary/50 hover:shadow-md h-full flex flex-col">
+        {/* IMAGE SECTION: Now handles missing images safely */}
+        <div className="relative aspect-square w-full overflow-hidden bg-muted flex items-center justify-center">
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={name}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center text-muted-foreground/30">
+              <Coffee className="h-12 w-12" />
+            </div>
+          )}
         </div>
-      </Link>
 
-      <CardHeader className="p-4 pb-2">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            {roaster}
-          </p>
-          <span className="text-xs text-muted-foreground">{roastLevel} Roast</span>
-        </div>
-        {/* 2. Link the Title */}
-        <Link href={`/coffees/${id}`} className="block">
-          <h3 className="font-serif text-lg font-bold leading-tight group-hover:text-primary transition-colors">
-            {name}
-          </h3>
-        </Link>
-      </CardHeader>
+        <CardContent className="p-4 flex-1 flex flex-col gap-2">
+          <div className="flex justify-between items-start gap-2">
+            <div>
+              <h3 className="font-bold truncate pr-2 group-hover:text-primary transition-colors line-clamp-1">
+                {name}
+              </h3>
+              <p className="text-xs text-muted-foreground line-clamp-1">
+                {roaster}
+              </p>
+            </div>
+            <div className="flex items-center gap-1 bg-yellow-400/10 text-yellow-600 px-1.5 py-0.5 rounded text-[10px] font-bold shrink-0">
+              {rating > 0 ? rating.toFixed(1) : "-"} <Star className="h-3 w-3 fill-current" />
+            </div>
+          </div>
 
-      <CardContent className="p-4 pt-0">
-        <div className="flex flex-wrap gap-1.5 mt-2">
-          {flavors.slice(0, 3).map((flavor) => (
-            <Badge key={flavor} variant="secondary" className="font-normal text-xs">
-              {flavor}
+          <div className="flex items-center gap-2 mt-1">
+            <Badge variant="outline" className="text-[10px] px-1.5 h-5 font-normal">
+              {roastLevel}
             </Badge>
-          ))}
-        </div>
-      </CardContent>
+            {reviewCount > 0 && (
+              <span className="text-[10px] text-muted-foreground">
+                ({reviewCount} reviews)
+              </span>
+            )}
+          </div>
 
-      <CardFooter className="p-4 pt-0 mt-auto">
-        <p className="text-xs text-muted-foreground">
-          Based on {reviewCount} reviews
-        </p>
-      </CardFooter>
-    </Card>
+          {/* Optional: Show flavor tags if available */}
+          {flavors && flavors.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-auto pt-2">
+              {flavors.slice(0, 2).map((flavor) => (
+                <span key={flavor} className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full">
+                  {flavor}
+                </span>
+              ))}
+              {flavors.length > 2 && (
+                <span className="text-[10px] text-muted-foreground px-1 py-0.5">
+                  +{flavors.length - 2}
+                </span>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </Link>
   );
 }

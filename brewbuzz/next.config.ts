@@ -5,12 +5,15 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
+        hostname: "images.unsplash.com", // <--- FIX FOR DUMMY DATA
+        port: "",
+        pathname: "/**",
       },
-      // Proactive Fix: Allowing Supabase images for later
       {
         protocol: "https",
-        hostname: "*.supabase.co", 
+        hostname: "uawawpfszktqvmvtzvih", // <--- CRITICAL: CHANGE THIS
+        port: "",
+        pathname: "/storage/v1/object/public/**",
       },
     ],
   },
