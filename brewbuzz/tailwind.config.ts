@@ -19,7 +19,7 @@ const config: Config = {
         extend: {
             fontFamily: {
                 sans: ["var(--font-sans)"],
-                serif: ["var(--font-serif)"], // Add this line
+                serif: ["var(--font-serif)"],
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -27,25 +27,34 @@ const config: Config = {
                 ring: "hsl(var(--ring))",
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
+
+                // CUSTOM COFFEE PALETTE START
                 primary: {
-                    DEFAULT: "hsl(var(--primary))",
-                    foreground: "hsl(var(--primary-foreground))",
+                    DEFAULT: "#D97706", // Burnt Amber/Orange (Warm & Active)
+                    foreground: "#FFFFFF",
                 },
                 secondary: {
-                    DEFAULT: "hsl(var(--secondary))",
-                    foreground: "hsl(var(--secondary-foreground))",
+                    DEFAULT: "#F5F5F4", // Warm Stone/Latte
+                    foreground: "#44403C", // Dark Stone
                 },
+                muted: {
+                    DEFAULT: "#F0EBE6", // Paper-like off-white
+                    foreground: "#78716C", // Warm Grey
+                },
+                accent: {
+                    DEFAULT: "#E7E5E4",
+                    foreground: "#1C1917",
+                },
+                // New specific 'coffee' colors for deep backgrounds/text
+                coffee: {
+                    100: "#F5F5F4", // Stone 100
+                    900: "#1C1917", // Stone 900 (Espresso)
+                },
+                // CUSTOM COFFEE PALETTE END
+
                 destructive: {
                     DEFAULT: "hsl(var(--destructive))",
                     foreground: "hsl(var(--destructive-foreground))",
-                },
-                muted: {
-                    DEFAULT: "hsl(var(--muted))",
-                    foreground: "hsl(var(--muted-foreground))",
-                },
-                accent: {
-                    DEFAULT: "hsl(var(--accent))",
-                    foreground: "hsl(var(--accent-foreground))",
                 },
                 popover: {
                     DEFAULT: "hsl(var(--popover))",
