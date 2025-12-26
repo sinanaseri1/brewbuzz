@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Navbar } from "@/components/navbar";
 import { createClient } from "@/utils/supabase/server";
 import { ReviewModal } from "@/components/review-modal";
+import Link from "next/link";
 
 export default async function CoffeeDetailPage({
     params,
@@ -55,16 +56,19 @@ export default async function CoffeeDetailPage({
                     </div>
 
                     <div className="space-y-8">
-                        <div>
-                            <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                                <span className="font-semibold text-primary">{coffee.roasters.name}</span>
-                                <span>•</span>
-                                <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {coffee.roasters.country || "Unknown Origin"}</span>
-                            </div>
-                            <h1 className="font-serif text-4xl font-bold">{coffee.name}</h1>
-                            <div className="flex items-center gap-4 mt-4">
-                                <Badge variant="outline" className="text-base px-3 py-1">{coffee.roast_level} Roast</Badge>
-                            </div>
+                        <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                            {/* NEW: Link to Roaster Page */}
+                            <Link
+                                href={`/roasters/${coffee.roaster_id}`}
+                                className="font-semibold text-primary hover:underline hover:text-primary/80 transition-colors"
+                            >
+                                {coffee.roasters.name}
+                            </Link>
+                            <span>•</span>
+                            <span className="flex items-center gap-1">
+                                <MapPin className="h-3 w-3" />
+                                {coffee.roasters.country || "Unknown Origin"}
+                            </span>
                         </div>
 
                         {/* Rating Summary */}
