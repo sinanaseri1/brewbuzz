@@ -1,74 +1,54 @@
 import Link from "next/link";
-import { ExternalLink, MapPin } from "lucide-react";
 import { Navbar } from "@/components/navbar";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
+import { MapPin, ArrowRight } from "lucide-react";
 
-export default async function RoastersPage() {
-  const supabase = await createClient();
-  const { data: roasters } = await supabase.from("roasters").select("*");
+export default async function RoastersIndex() {
+    const supabase = await createClient();
 
-  return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    // Fetch all roasters alphabetically
+    const { data: roasters } = await supabase
+        .from("roasters")
+        .select("*")
+        .order("name");
 
-      <main className="container py-10">
-        <div className="mb-8 space-y-2">
-          <h1 className="font-serif text-3xl font-bold">Our Roasters</h1>
-          <p className="text-muted-foreground">
-            The talented teams behind the beans.
-          </p>
-        </div>
+    return (
+        <div className="min-h-screen bg-white">
+            <Navbar />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {roasters?.map((roaster) => (
-            <Card key={roaster.id} className="flex flex-col">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="font-serif text-xl">
-                      {roaster.name}
-                    </CardTitle>
-                    <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
-                      <MapPin className="h-3 w-3" />
-                      {roaster.country}
+            <main className="container py-12 md:py-20">
+                <div className="max-w-4xl mx-auto">
+                    <h1 className="font-serif text-5xl font-bold mb-6 text-ink-900">
+                        Roaster Directory
+                    </h1>
+                    <p className="text-xl text-ink-500 mb-12 leading-relaxed border-b border-border pb-12">
+                        The complete index of independent roasters tracked by the BrewBuzz community.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                        {roasters?.map((roaster) => (
+                            <Link
+                                key={roaster.id}
+                                href={`/roasters/${roaster.id}`}
+                                className="group flex items-start justify-between py-6 border-b border-border hover:bg-secondary/30 transition-colors px-2 -mx-2"
+                            >
+                                <div>
+                                    <h3 className="font-serif text-2xl font-bold group-hover:text-primary transition-colors">
+                                        {roaster.name}
+                                    </h3>
+                                    {roaster.country && (
+                                        <div className="flex items-center gap-2 text-ink-500 mt-2 text-sm font-medium uppercase tracking-wider">
+                                            <MapPin className="h-3 w-3" />
+                                            {roaster.country}
+                                        </div>
+                                    )}
+                                </div>
+                                <ArrowRight className="h-5 w-5 text-border group-hover:text-primary transition-colors opacity-0 group-hover:opacity-100" />
+                            </Link>
+                        ))}
                     </div>
-                  </div>
                 </div>
-                <CardDescription className="mt-2">
-                  Known for quality sourcing and unique roast profiles.
-                </CardDescription>
-              </CardHeader>
-              <CardFooter className="mt-auto gap-2 pt-0">
-                {/* 1. View their Coffees (Links to your Catalog with a search filter) */}
-                <Button asChild className="flex-1">
-                  <Link href={`/coffees?q=${roaster.name}`}>View Coffees</Link>
-                </Button>
-                
-                {/* 2. Visit Website (External) */}
-                {roaster.website && (
-                  <Button variant="outline" size="icon" asChild>
-                    <a
-                      href={roaster.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
-          ))}
+            </main>
         </div>
-      </main>
-    </div>
-  );
+    );
 }

@@ -4,66 +4,37 @@
 
 @layer base {
   :root {
-    /* WARM PAPER THEME */
-    --background: 40 20% 97%;
-    /* #FDFBF7 - Warm Cream */
-    --foreground: 24 10% 10%;
-    /* #1C1917 - Espresso Black */
-
+    /* STRICT EDITORIAL THEME */
+    --background: 0 0% 100%; /* Pure White */
+    --foreground: 0 0% 7%;   /* #121212 */
+ 
     --card: 0 0% 100%;
-    --card-foreground: 24 10% 10%;
-
+    --card-foreground: 0 0% 7%;
+ 
     --popover: 0 0% 100%;
-    --popover-foreground: 24 10% 10%;
-
-    --primary: 36 100% 45%;
-    /* Amber-600 */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 40 20% 94%;
-    --secondary-foreground: 24 10% 10%;
-
-    --muted: 40 20% 94%;
-    --muted-foreground: 25 5% 45%;
-
-    --accent: 40 20% 94%;
-    --accent-foreground: 24 10% 10%;
-
+    --popover-foreground: 0 0% 7%;
+ 
+    /* The BBC/Editorial "Dark Red" */
+    --primary: 0 100% 27%; 
+    --primary-foreground: 0 0% 98%;
+ 
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 9%;
+ 
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+ 
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 9%;
+ 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 40 10% 90%;
-    --input: 40 10% 90%;
-    --ring: 36 100% 45%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 0 0% 90%; 
+    --input: 0 0% 90%;
+    --ring: 0 100% 27%;
+ 
+    --radius: 0rem; /* Square corners for editorial look */
   }
 }
 
@@ -71,20 +42,21 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
-    /* ADD GRAIN TEXTURE */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   }
 }
 
-/* Make headings feel more editorial */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-serif tracking-tight text-coffee-900;
+/* TYPOGRAPHY HIERARCHY */
+/* We switched 'text-coffee-900' to 'text-ink-900' */
+h1 {
+  @apply font-serif font-bold tracking-tight text-ink-900;
+}
+
+h2, h3, h4, h5, h6 {
+  @apply font-serif font-bold text-ink-900;
+}
+
+p {
+  @apply font-sans text-ink-700 leading-relaxed;
 }

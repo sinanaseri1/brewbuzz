@@ -1,27 +1,23 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function CoffeeCardSkeleton() {
     return (
-        <Card className="h-full flex flex-col overflow-hidden border-slate-200">
-            {/* Image Placeholder */}
-            <div className="aspect-square w-full bg-muted relative">
-                <Skeleton className="h-full w-full" />
+        <div className="h-full flex flex-col border border-border bg-white">
+            <div className="aspect-[4/3] w-full bg-secondary relative border-b border-border">
+                <Skeleton className="h-full w-full rounded-none" />
             </div>
-
-            <CardContent className="p-4 flex-1 flex flex-col gap-3">
-                {/* Title & Roaster */}
-                <div className="space-y-2">
-                    <Skeleton className="h-5 w-3/4" /> {/* Name */}
-                    <Skeleton className="h-4 w-1/2" /> {/* Roaster */}
+            <div className="p-5 flex flex-col gap-4">
+                <div className="flex justify-between">
+                    <Skeleton className="h-3 w-20 rounded-none" />
                 </div>
-
-                {/* Rating & Badge */}
-                <div className="flex items-center justify-between mt-auto pt-2">
-                    <Skeleton className="h-5 w-12 rounded" /> {/* Rating */}
-                    <Skeleton className="h-5 w-16 rounded-full" /> {/* Roast Level */}
+                <div>
+                    <Skeleton className="h-6 w-3/4 mb-2 rounded-none" />
+                    <Skeleton className="h-4 w-1/2 rounded-none" />
                 </div>
-            </CardContent>
-        </Card>
+                <div className="mt-auto pt-4 border-t border-border">
+                    <Skeleton className="h-3 w-full rounded-none" />
+                </div>
+            </div>
+        </div>
     );
 }

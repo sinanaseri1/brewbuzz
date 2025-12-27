@@ -1,76 +1,111 @@
 import Link from "next/link";
-import { Coffee, Plus, Shield } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
+import { Logo } from "@/components/logo";
 import { UserNav } from "./user-nav";
+
+// --- CONFIGURATION ---
+const NAV_LINKS = [
+    { label: "News", href: "#", disabled: true },
+    { label: "Reviews", href: "/coffees", disabled: false },
+    { label: "Roasters", href: "/roasters", disabled: false },
+    { label: "Equipment", href: "#", disabled: true },
+    { label: "Culture", href: "#", disabled: true },
+];
+
+const TRENDING_TOPICS = [
+    { label: "Best Espresso Machines 2025", href: "#" },
+    { label: "The Rise of Robusta", href: "#" },
+    { label: "Ethiopian Harvest Guide", href: "#" },
+];
 
 export async function Navbar() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    let isAdmin = false;
-    if (user) {
-        const { data: profile } = await supabase
-            .from("profiles")
-            .select("role")
-            .eq("id", user.id)
-            .single();
-        isAdmin = profile?.role === "admin";
-    }
-
     return (
-        <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-            <div className="container flex h-16 items-center justify-between px-4 sm:px-8">
+        <header className="flex flex-col w-full border-b border-ink-100 bg-white sticky top-0 z-50">
 
-                {/* LOGO */}
-                <Link href="/" className="flex items-center gap-2 font-serif text-xl font-bold">
-                    <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground shrink-0">
-                        <Coffee className="h-5 w-5" />
-                    </div>
-                    {/* Hide the text "BrewBuzz" on VERY small phones if needed, but usually it fits */}
-                    <span className="hidden xs:inline">BrewBuzz</span>
-                </Link>
+            {/* 1. MAIN MASTHEAD */}
+            <div className="container h-20 flex items-center justify-between px-4 sm:px-8">
 
-                {/* RIGHT SIDE ACTIONS */}
-                <div className="flex items-center gap-2 sm:gap-4">
+                {/* Left: Brand & Mobile Trigger */}
+                <div className="flex items-center gap-4">
+                    {/* Mobile Menu Icon (Visible only on mobile) */}
+                    <Button variant="ghost" size="icon" className="md:hidden text-ink-900 -ml-2">
+                        <Menu className="h-6 w-6" />
+                        <span className="sr-only">Menu</span>
+                    </Button>
 
-                    {/* A. ADMIN LINK */}
-                    {isAdmin && (
-                        <Button variant="ghost" size="sm" asChild className="text-red-600 hover:text-red-700 hover:bg-red-50 px-2 sm:px-4">
-                            <Link href="/admin">
-                                <Shield className="h-4 w-4 sm:mr-2" />
-                                <span className="hidden sm:inline">Admin</span>
+                    <Link href="/" className="flex items-center gap-3 group">
+                        <div className="h-10 w-10 text-primary transition-colors group-hover:text-primary/80">
+                            <Logo className="w-full h-full" />
+                        </div>
+                        <span className="font-serif text-2xl font-bold tracking-tight text-ink-900 hidden sm:inline-block">
+                            BrewBuzz
+                        </span>
+                    </Link>
+                </div>
+
+                {/* Center: Navigation (Desktop) */}
+                <nav className="hidden md:flex items-center gap-8">
+                    {NAV_LINKS.map((item) => (
+                        item.disabled ? (
+                            // Disabled State
+                            <span
+                                key={item.label}
+                                className="text-sm font-bold uppercase tracking-wider text-ink-500 cursor-not-allowed opacity-50 select-none"
+                                title="Coming Soon"
+                            >
+                                {item.label}
+                            </span>
+                        ) : (
+                            // Active State
+                            <Link
+                                key={item.label}
+                                href={item.href}
+                                className="text-sm font-bold uppercase tracking-wider text-ink-900 hover:text-primary border-b-2 border-transparent hover:border-primary transition-all py-1"
+                            >
+                                {item.label}
                             </Link>
-                        </Button>
-                    )}
+                        )
+                    ))}
+                </nav>
+
+                {/* Right: Actions */}
+                <div className="flex items-center gap-2 sm:gap-4">
+                    <Button variant="ghost" size="icon" className="text-ink-900">
+                        <Search className="h-5 w-5" />
+                    </Button>
+
+                    <div className="h-6 w-px bg-ink-100 mx-1 hidden sm:block" />
 
                     {user ? (
-                        <>
-                            {/* B. ADD COFFEE LINK (Icon only on mobile, Text on Desktop) */}
-                            <Button size="sm" variant="outline" asChild className="px-2 sm:px-4">
-                                <Link href="/coffees/add">
-                                    <Plus className="h-4 w-4 sm:mr-2" />
-                                    <span className="hidden sm:inline">Add Coffee</span>
-                                </Link>
-                            </Button>
-
-                            {/* Profile Dropdown */}
-                            <UserNav email={user.email!} />
-                        </>
+                        <UserNav email={user.email!} />
                     ) : (
-                        /* C. GUEST VIEW */
-                        <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="sm" asChild>
-                                <Link href="/login">Sign In</Link>
-                            </Button>
-                            <Button size="sm" asChild>
-                                <Link href="/login">Get Started</Link>
-                            </Button>
-                        </div>
+                        <Button variant="default" size="sm" asChild className="bg-ink-900 text-white hover:bg-ink-700 font-bold px-6">
+                            <Link href="/login">Sign In</Link>
+                        </Button>
                     )}
-
                 </div>
             </div>
-        </nav>
+
+            {/* 2. SUB-HEADER (Trending) */}
+            <div className="hidden md:block border-t border-ink-100 bg-secondary/30">
+                <div className="container h-10 flex items-center gap-6 text-xs font-medium text-ink-500">
+                    <span className="text-primary font-bold uppercase">Trending:</span>
+                    {TRENDING_TOPICS.map((topic, index) => (
+                        <Link
+                            key={index}
+                            href={topic.href}
+                            className="hover:text-ink-900 transition-colors"
+                        >
+                            {topic.label}
+                        </Link>
+                    ))}
+                </div>
+            </div>
+        </header>
     );
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Star, Coffee } from "lucide-react";
+import { Star, Coffee, ArrowUpRight } from "lucide-react";
 
 interface CoffeeCardProps {
   id: string;
@@ -21,58 +21,62 @@ export function CoffeeCard({
   rating,
   roastLevel,
   flavors = [],
-  reviewCount = 0,
 }: CoffeeCardProps) {
   return (
     <Link href={`/coffees/${id}`} className="group block h-full">
-      {/* Container: No shadow, border with warm color, off-white background */}
-      <div className="h-full flex flex-col border border-stone-200 bg-white rounded-xl overflow-hidden transition-all duration-300 hover:border-primary/50 hover:-translate-y-1">
+      <div className="h-full flex flex-col bg-white border border-border transition-all duration-200 hover:border-ink-900">
 
-        {/* IMAGE: Add a slight sepia filter on hover for vintage feel */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 flex items-center justify-center border-b border-stone-100">
+        {/* IMAGE: Square, Sharp, No Radius */}
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-secondary border-b border-border">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={name}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105 group-hover:sepia-[.2]"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            <Coffee className="h-10 w-10 text-stone-300" />
+            <div className="flex items-center justify-center h-full text-muted-foreground">
+              <Coffee className="h-8 w-8 opacity-20" />
+            </div>
           )}
 
-          {/* Floating Rating Badge */}
-          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold shadow-sm border border-stone-100 flex items-center gap-1 text-stone-900">
-            {rating > 0 ? rating.toFixed(1) : "-"} <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
-          </div>
+          {/* Rating Tag: Sharp rectangle in the corner */}
+          {rating > 0 && (
+            <div className="absolute top-0 right-0 bg-ink-900 text-white text-xs font-bold px-3 py-1.5 flex items-center gap-1">
+              {rating.toFixed(1)} <Star className="h-3 w-3 fill-white text-white" />
+            </div>
+          )}
         </div>
 
-        <div className="p-5 flex flex-col flex-1">
-          {/* Metadata Row - Use Monospace font if available, or just uppercase tracking */}
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-primary">
-              {roastLevel} Roast
+        <div className="p-5 flex flex-col flex-1 gap-3">
+          {/* Metadata: Uppercase & Technical */}
+          <div className="flex justify-between items-start">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
+              {roastLevel}
             </span>
+            <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
           </div>
 
-          <h3 className="font-serif text-xl font-bold text-stone-900 leading-tight mb-1 group-hover:text-primary transition-colors">
-            {name}
-          </h3>
-          <p className="text-sm text-stone-500 mb-4 font-medium">
-            {roaster}
-          </p>
-
-          {/* Flavors as distinct tags */}
-          <div className="mt-auto flex flex-wrap gap-1.5">
-            {flavors && flavors.slice(0, 3).map((flavor) => (
-              <span
-                key={flavor}
-                className="text-[10px] px-2 py-1 rounded-full bg-stone-100 text-stone-600 font-medium"
-              >
-                {flavor}
-              </span>
-            ))}
+          <div>
+            <h3 className="font-serif text-xl font-bold leading-tight group-hover:underline decoration-2 decoration-primary underline-offset-4">
+              {name}
+            </h3>
+            <p className="text-sm text-ink-500 mt-1 font-medium">
+              by {roaster}
+            </p>
           </div>
+
+          {/* Flavors: Text links instead of bubbles */}
+          {flavors.length > 0 && (
+            <div className="mt-auto pt-4 border-t border-border flex flex-wrap gap-x-4 gap-y-1">
+              {flavors.slice(0, 3).map((flavor) => (
+                <span key={flavor} className="text-xs font-medium text-ink-500 italic">
+                  #{flavor}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </Link>

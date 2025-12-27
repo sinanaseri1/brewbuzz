@@ -12,14 +12,12 @@ const config: Config = {
         container: {
             center: true,
             padding: "2rem",
-            screens: {
-                "2xl": "1400px",
-            },
+            screens: { "2xl": "1400px" },
         },
         extend: {
             fontFamily: {
-                sans: ["var(--font-sans)"],
-                serif: ["var(--font-serif)"],
+                sans: ["var(--font-sans)"], // Inter (Clean UI)
+                serif: ["var(--font-serif)"], // Playfair (Headlines)
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -28,29 +26,30 @@ const config: Config = {
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
 
-                // CUSTOM COFFEE PALETTE START
+                // EDITORIAL PALETTE
                 primary: {
-                    DEFAULT: "#D97706", // Burnt Amber/Orange (Warm & Active)
+                    DEFAULT: "#8B0000", // "Dark Red" - Authoritative, like a seal or stamp.
                     foreground: "#FFFFFF",
                 },
                 secondary: {
-                    DEFAULT: "#F5F5F4", // Warm Stone/Latte
-                    foreground: "#44403C", // Dark Stone
+                    DEFAULT: "#F4F4F4", // Very light grey for backgrounds (BBC style)
+                    foreground: "#121212",
                 },
                 muted: {
-                    DEFAULT: "#F0EBE6", // Paper-like off-white
-                    foreground: "#78716C", // Warm Grey
+                    DEFAULT: "#E5E5E5", // Neutral Grey
+                    foreground: "#525252", // Subtitle Grey
                 },
                 accent: {
-                    DEFAULT: "#E7E5E4",
-                    foreground: "#1C1917",
+                    DEFAULT: "#F4F4F4",
+                    foreground: "#121212",
                 },
-                // New specific 'coffee' colors for deep backgrounds/text
-                coffee: {
-                    100: "#F5F5F4", // Stone 100
-                    900: "#1C1917", // Stone 900 (Espresso)
+                // "Ink" colors for typography hierarchy
+                ink: {
+                    900: "#121212", // Main Headings (Almost Black)
+                    700: "#333333", // Body Text
+                    500: "#595959", // Meta data (dates, authors)
+                    100: "#F2F2F2", // Dividers
                 },
-                // CUSTOM COFFEE PALETTE END
 
                 destructive: {
                     DEFAULT: "hsl(var(--destructive))",
@@ -66,24 +65,11 @@ const config: Config = {
                 },
             },
             borderRadius: {
-                lg: "var(--radius)",
-                md: "calc(var(--radius) - 2px)",
-                sm: "calc(var(--radius) - 4px)",
+                lg: "0px", // BBC style is often squared or very slightly rounded. Let's go square for authority.
+                md: "0px",
+                sm: "0px",
             },
-            keyframes: {
-                "accordion-down": {
-                    from: { height: "0" },
-                    to: { height: "var(--radix-accordion-content-height)" },
-                },
-                "accordion-up": {
-                    from: { height: "var(--radix-accordion-content-height)" },
-                    to: { height: "0" },
-                },
-            },
-            animation: {
-                "accordion-down": "accordion-down 0.2s ease-out",
-                "accordion-up": "accordion-up 0.2s ease-out",
-            },
+            // ... animations if you kept them
         },
     },
     plugins: [require("tailwindcss-animate")],
